@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Искусственный интеллект в нашей жизни</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#0f172a;color:#e2e8f0}
+header{background:#1e293b;padding:20px;text-align:center}
+section{max-width:900px;margin:auto;padding:40px 20px}
+h1,h2{color:#38bdf8}
+.card{background:#1e293b;padding:20px;border-radius:12px;margin:15px 0}
+button{background:#38bdf8;border:none;padding:12px 20px;border-radius:8px;font-size:16px;cursor:pointer}
+#chat{margin-top:20px}
+input{width:70%;padding:10px;border-radius:8px;border:none}
+.message{background:#334155;padding:10px;border-radius:8px;margin:8px 0}
+footer{text-align:center;padding:20px;background:#020617}
+</style>
+</head>
+<body><header>
+<h1>Искусственный интеллект в нашей жизни</h1>
+<p>Проект по информатике</p>
+</header><section>
+<h2>Что такое искусственный интеллект</h2>
+<div class="card">
+<p>Искусственный интеллект (ИИ) — это технологии, которые позволяют компьютерам выполнять задачи, обычно требующие человеческого мышления: понимать текст, распознавать изображения, отвечать на вопросы и принимать решения.</p>
+</div><h2>Где используется ИИ</h2>
+<div class="card">
+<ul>
+<li>Голосовые помощники</li>
+<li>Рекомендации в YouTube и TikTok</li>
+<li>Навигаторы и карты</li>
+<li>Медицина</li>
+<li>Беспилотные автомобили</li>
+</ul>
+</div><h2>Плюсы и минусы ИИ</h2>
+<div class="card">
+<b>Плюсы:</b>
+<ul>
+<li>Автоматизация работы</li>
+<li>Помощь в обучении</li>
+<li>Быстрый анализ данных</li>
+</ul>
+<b>Минусы:</b>
+<ul>
+<li>Возможная потеря рабочих мест</li>
+<li>Ошибки алгоритмов</li>
+<li>Зависимость людей от технологий</li>
+</ul>
+</div><h2>Мини-чат с ИИ</h2>
+<div class="card">
+<div id="chat"></div>
+<input id="userInput" placeholder="Задай вопрос про ИИ...">
+<button onclick="sendMessage()">Отправить</button>
+</div>
+</section><footer>
+<p>Проект ученика 9 класса • 2026</p>
+</footer><script>
+async function sendMessage(){
+  let input=document.getElementById("userInput");
+  let chat=document.getElementById("chat");
+  let text=input.value;
+
+  let userMsg=document.createElement("div");
+  userMsg.className="message";
+  userMsg.innerText="Вы: "+text;
+  chat.appendChild(userMsg);
+
+  // Отправка запроса к OpenRouter API (DeepSeek)
+  let response=await fetch('https://openrouter.ai/api/v1/chat/completions',{  
+    method:'POST',
+    headers:{
+      'Authorization':'Bearer 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',
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      model:'deepseek/deepseek-r1:free',
+      messages:[{role:'user',content:text}]
+    })
+  });
+
+  let data=await response.json();
+  let botMsg=document.createElement("div");
+  botMsg.className="message";
+  botMsg.innerText="AI: "+data.choices[0].message.content;
+  chat.appendChild(botMsg);
+
+  input.value="";
+  chat.scrollTop=chat.scrollHeight;
+}
+</script></body>
+</html>
